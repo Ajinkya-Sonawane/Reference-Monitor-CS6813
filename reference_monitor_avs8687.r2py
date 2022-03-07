@@ -34,11 +34,13 @@ class ABFile():
 
     def writeat(self, data, offset):
         # Write the requested data to the B file using the sandbox's writeat call
-        self.Bfile.writeat(data, offset)
+        if offset >= 0:
+            self.Bfile.writeat(data, offset)
 
     def readat(self, bytes, offset):
         # Read from the A file using the sandbox's readat...
-        return self.Afile.readat(bytes, offset)
+        if offset >= 0:
+            return self.Afile.readat(bytes, offset)
 
     def copyFromBtoA(self,data_from_b):
         self.Afile.writeat(data_from_b,0)
