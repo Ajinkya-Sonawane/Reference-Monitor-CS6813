@@ -33,6 +33,8 @@ class ABFile():
         if self.Ofn in listfiles():
                 self.Ofile = openfile(self.Ofn, create)
         else:
+            if not create:
+                return
             self.Ofile = openfile(self.Ofn, True)
         if self.Afn in listfiles():
             self.Afile = openfile(self.Afn, not create)
