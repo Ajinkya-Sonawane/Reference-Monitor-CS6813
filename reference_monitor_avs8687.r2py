@@ -46,14 +46,20 @@ class ABFile():
         # Read from the A file using the sandbox's readat...
         return self.Afile.readat(bytes, offset)
 
+    def checkValidity(self, fileObject):
+        data_from_file = fileObject.readat(None,0)
+        if len(data_from_file) > 1:
+            if(data_from_file[0] == 'S' and data_from_file[-1] == 'E'):
+                return True
+        return False
+
     def copyFromBtoA(self,data_from_b):
         self.Afile.writeat(data_from_b,0)
 
     def close(self):
-        data_from_b = self.Bfile.readat(None,0)
-        if len(data_from_b) > 1:
-            if(data_from_b[0] == 'S' and data_from_b[-1] == 'E'):
-                self.copyFromBtoA(data_from_b)
+        if self.checkValidity(self.Afile) and self.checkValidity(self.Bfile):
+            data_from_b = self.Bfile.readat(None,0)
+            self.copyFromBtoA(data_from_b)
         self.Afile.close()
         self.Bfile.close()
 
