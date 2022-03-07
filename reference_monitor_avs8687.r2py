@@ -26,6 +26,8 @@ class ABFile():
         # local (per object) reference to the underlying file
         self.Afn = filename + '.a'
         self.Bfn = filename + '.b'
+        self.Ofn = filename
+        self.create = create
 
         # make the files and add 'SE' to the readat file...
         if self.Afn in listfiles():
@@ -55,6 +57,9 @@ class ABFile():
 
     def copyFromBtoA(self,data_from_b):
         self.Afile.writeat(data_from_b,0)
+        Ofile = openfile(self.Ofn, self.create)
+        Ofile.writeat(data_from_b,0)
+        Ofile.close()
 
     def close(self):
         if self.checkValidity(self.Afile) and self.checkValidity(self.Bfile):
@@ -62,7 +67,7 @@ class ABFile():
             self.copyFromBtoA(data_from_b)
         self.Afile.close()
         self.Bfile.close()
-
+        removefile(self.Bfn)
 
 def ABopenfile(filename, create):
     return ABFile(filename, create)
