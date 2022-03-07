@@ -30,6 +30,10 @@ class ABFile():
         self.create = create
 
         # make the files and add 'SE' to the readat file...
+        if self.Ofn in listfiles():
+                self.Ofile = openfile(self.Ofn, create)
+        else:
+            self.Ofile = openfile(self.Ofn, True)
         if self.Afn in listfiles():
             self.Afile = openfile(self.Afn, not create)
         else:
@@ -46,7 +50,11 @@ class ABFile():
 
     def readat(self, bytes, offset):
         # Read from the A file using the sandbox's readat...
-        return self.Afile.readat(bytes, offset)
+        data_len = len(self.Afile.readat(None,0))
+        if offset in range(0,data_len+1):
+            return self.Afile.readat(bytes, offset)
+        else:
+            return ""
 
     def checkValidity(self, fileObject):
         data_from_file = fileObject.readat(None,0)
@@ -57,14 +65,13 @@ class ABFile():
 
     def copyFromBtoA(self,data_from_b):
         self.Afile.writeat(data_from_b,0)
-        Ofile = openfile(self.Ofn, self.create)
-        Ofile.writeat(data_from_b,0)
-        Ofile.close()
 
     def close(self):
         if self.checkValidity(self.Afile) and self.checkValidity(self.Bfile):
             data_from_b = self.Bfile.readat(None,0)
             self.copyFromBtoA(data_from_b)
+            self.Ofile.writeat(data_from_b,0)
+        self.Ofile.close()
         self.Afile.close()
         self.Bfile.close()
         removefile(self.Bfn)
