@@ -29,6 +29,10 @@ class ABFile():
         if filename.strip() == "" or len(filename) > 120 or filename in [".",".."]:
             return
 
+        for char in filename:
+            if char not in [".","-","_"] and not char.isalpha() and not char.isdigit():
+                return
+
         # local (per object) reference to the underlying file
         self.Afn = filename + '.a'
         self.Bfn = filename + '.b'
