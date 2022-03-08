@@ -55,10 +55,10 @@ class ABFile():
     def readat(self, bytes, offset):
         # Read from the A file using the sandbox's readat...
         data_len = len(self.Afile.readat(None,0))
-        if offset in range(0,data_len+1):
+        if data_len > 1 and offset in range(0,data_len+1):
             return self.Afile.readat(bytes, offset)
         else:
-            return ""
+            return "SE"
 
     def checkValidity(self, fileObject):
         data_from_file = fileObject.readat(None,0)
