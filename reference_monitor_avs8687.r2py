@@ -42,6 +42,8 @@ class ABFile():
             self.Afile = openfile(self.Afn, create)
             if create:
                 self.Afile.writeat('SE', 0)
+            else:
+                self.Afile.writeat(self.Ofile.readat(None,0),0)
         self.Bfile = openfile(self.Bfn, True)
 
     def writeat(self, data, offset):
